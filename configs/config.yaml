@@ -11,6 +11,7 @@ dataset_splits:
 preprocessing_num_workers: 12
 
 # Trainer arguments
+use_flash_attention_2: true
 bf16: true
 beta: 0.1
 do_eval: false
@@ -39,16 +40,16 @@ warmup_ratio: 0.1
 report_to: "wandb"
 
 # LoRA arguments
-load_in_4bit: false
-use_peft: true
-lora_r: 16
-lora_alpha: 16
-lora_dropout: 0.05
-lora_target_modules:
-- q_proj
-- k_proj
-- v_proj
-- o_proj
-- gate_proj
-- up_proj
-- down_proj
+#load_in_4bit: false
+#use_peft: true
+#lora_r: 16
+#lora_alpha: 16
+#lora_dropout: 0.05
+#lora_target_modules:
+#- q_proj
+#- k_proj
+#- v_proj
+#- o_proj
+#- gate_proj
+#- up_proj
+#- down_proj

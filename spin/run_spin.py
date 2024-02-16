@@ -116,7 +116,7 @@ def main():
     )
 
     # Replace column names with what TRL needs, text_real -> real and text_generated -> generated
-    for split in ["train", "test"]:
+    for split in ["train"]:
         raw_datasets[split] = raw_datasets[split].rename_columns(
             {"text_prompt": "prompt", "text_real": "real", "text_generated": "generated"}
         )
@@ -156,7 +156,7 @@ def main():
         args=training_args,
         beta=training_args.beta,
         train_dataset=raw_datasets["train"],
-        eval_dataset=raw_datasets["test"],
+        #eval_dataset=raw_datasets["test"],
         tokenizer=tokenizer,
         max_length=training_args.max_length,
         max_prompt_length=training_args.max_prompt_length,

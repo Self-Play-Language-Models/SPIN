@@ -53,9 +53,19 @@ def main():
     #    else:
     #        data = data[sub_len*data_frac:sub_len*(data_frac+1)]['real']
 
-    prompts_all = ["### Instruction: " + data[idx][0]['content'] + "\n\n### Response: " for idx in range(len(data))]
-    prompts_old = [data[idx][0]['content'] for idx in range(len(data))]
-    corrects_all = [data[idx][1]['content'] for idx in range(len(data))]
+    prompts_all = []
+    prompts_old = []
+    corrects_all = [] 
+
+    for idx in range(len(data)):
+        if data[idx]["conversations"][0]["from"] == "system":
+            prompts_all.append("### Instruction: " + data[idx]['conversations'][1]['value'] + "\n\n### Response: ")
+            prompts_old.append(data[idx]['conversations'][1]['value'])
+            corrects_all.append(data[idx]['conversations'][2]['value'])
+        else:
+            prompts_all.append("### Instruction: " + data[idx]['conversations'][0]['value'] + "\n\n### Response: ")
+            prompts_old.append(data[idx]['conversations'][0]['value'])
+            corrects_all.append(data[idx]['conversations'][1]['value'])
 
     start=time.time()
 
@@ -71,10 +81,8 @@ def main():
     # collecting data
     for idx in range(len(corrects_all)):
         d = {"real": [{"role": "user", "content": prompts_old[idx]}, {"role": "assistant", "content": corrects_all[idx]}], "generated": [{"role": "user", "content": prompts_old[idx]}, {"role": "assistant", "content": results[idx]}]}
-        if args.split == 'test':
-            filename = f"{args.output_dir}/loser_{data_frac}_test.jsonl"
-        else:
-            filename = f"{args.output_dir}/loser_{data_frac}.jsonl"
+  
+        filename = f"{args.output_dir}/data.jsonl"
         with open(filename, 'a') as f:
             json.dump(d, f)
             f.write('\n')

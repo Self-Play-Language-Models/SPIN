@@ -1,21 +1,21 @@
-# to get iter0
 # Model arguments
-model_name_or_path: alignment-handbook/zephyr-7b-sft-full
+model_name_or_path: openchat/openchat-3.5-0106
 
 # Data training arguments
 dataset_mixer:
-  splm/openchat-slimorca_iter0: 1.0
+  #HuggingFaceH4/ultrafeedback_binarized: 1.0
+  /workspace/SPIN/generated/iter0: 1.0
 dataset_splits:
 - train
 preprocessing_num_workers: 12
 
 # Trainer arguments
+
 bf16: true
 beta: 0.1
 do_eval: false
 evaluation_strategy: "no"
 eval_steps: 100
-gradient_accumulation_steps: 1
 gradient_checkpointing: true
 hub_model_id: zephyr-7b-spin
 learning_rate: 5.0e-7
@@ -27,13 +27,17 @@ max_prompt_length: 512
 num_train_epochs: 3
 optim: rmsprop
 output_dir: outputs
-per_device_train_batch_size: 12
-per_device_eval_batch_size: 8
+per_device_train_batch_size: 8
+per_device_eval_batch_size: 4
 push_to_hub: false
 save_strategy: "epoch"
 save_total_limit: null
 seed: 42
 warmup_ratio: 0.1
+do_sample: true
+
+# wandb
+report_to: "wandb"
 
 # LoRA arguments
 #load_in_4bit: false
