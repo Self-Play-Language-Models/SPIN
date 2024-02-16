@@ -1,13 +1,12 @@
+# to get iter0
 # Model arguments
 model_name_or_path: alignment-handbook/zephyr-7b-sft-full
 
 # Data training arguments
 dataset_mixer:
-  #HuggingFaceH4/ultrafeedback_binarized: 1.0
-  UCLA-AGI/SPIN_iter0: 1.0
+  splm/openchat-slimorca_iter1: 1.0
 dataset_splits:
 - train
-- test
 preprocessing_num_workers: 12
 
 # Trainer arguments
