@@ -533,12 +533,21 @@ class SPINTrainer(Trainer):
             policy_generated_logits,
         ) = self.concatenated_forward(model, batch)
         with torch.no_grad():
-            (
-                opponent_real_logps,
-                opponent_generated_logps,
-                _,
-                _,
-            ) = self.concatenated_forward(self.ref_model, batch)
+            if self.ref_model is None:
+                with self.accelerator.unwrap_model(self.model).disable_adapter():
+                    (
+                        opponent_real_logps,
+                        opponent_generated_logps,
+                        _,
+                        _,
+                    ) = self.concatenated_forward(self.model, batch)
+            else:
+                (
+                    opponent_real_logps,
+                    opponent_generated_logps,
+                    _,
+                    _,
+                ) = self.concatenated_forward(self.ref_model, batch)
 
         losses, real_rewards, generated_rewards = self.spin_loss(
             policy_real_logps,
