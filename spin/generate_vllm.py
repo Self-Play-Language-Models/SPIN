@@ -18,7 +18,6 @@ def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', type=str, default='UCLA-AGI/zephyr-7b-sft-full-SPIN-iter0')
-    parser.add_argument('--data_frac', type=int, default=0)
     parser.add_argument('--frac_len', type=int, default=0)
     parser.add_argument('--output_dir', type=str, default='generated/iter1')
     parser.add_argument('--world_size', type=int, default=8) # controls the number of gpus vLLM is allowed to use
@@ -29,7 +28,6 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     model_path = args.model
-    data_frac = args.data_frac
     world_size = args.world_size
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -48,12 +46,12 @@ def main():
     # load data
     data = load_dataset(args.input_dir, split=args.split)
     data = data.shuffle(seed=42)
-    if args.frac_len > 0:
-        sub_len = args.frac_len 
-        if sub_len*(data_frac+1) > len(data):
-            data = data[sub_len*data_frac:]['real']
-        else:
-            data = data[sub_len*data_frac:sub_len*(data_frac+1)]['real']
+    #if args.frac_len > 0:
+    #    sub_len = args.frac_len 
+    #    if sub_len*(data_frac+1) > len(data):
+    #        data = data[sub_len*data_frac:]['real']
+    #    else:
+    #        data = data[sub_len*data_frac:sub_len*(data_frac+1)]['real']
 
     prompts_all = ["### Instruction: " + data[idx][0]['content'] + "\n\n### Response: " for idx in range(len(data))]
     prompts_old = [data[idx][0]['content'] for idx in range(len(data))]
